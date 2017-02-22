@@ -7,10 +7,12 @@ var app = express();
 
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
-var fs=require('fs');
+
+// http://expressjs.com/en/starter/static-files.html
+app.use(express.static('public'));
+
 var jsonfile = require('jsonfile');
 
-//var rel0='0432';
 
 var file = './nodos.json';
 
@@ -19,45 +21,43 @@ function tira(entrada,rel)
   	{if(entrada[i].dest==rel)
   		{
   			rel=entrada[i].orig;
-  			dreams.push(rel);
+  			console.log(rel); dreams.push('\n'+rel);
   			i=0;
   		}
   	}
- 
+
 }
 
-function mete(rel0){
-jsonfile.readFile(file, function(err, obj) {
+function rel0(cto){
+  jsonfile.readFile(file, function(err, obj) {
   //console.dir(obj);
   var rela=obj.rel;
-  dreams.push('\n\n'+rel0); console.log(dreams);
   var cou=0, rel1=0;
+    dreams.push('\n\n'+cto);
   for (var i=0; i<rela.length;i++)
-  	{if(rela[i].dest==rel0)
+  	{if(rela[i].dest==cto)
   		{cou++; 
         rel1= rela[i].orig;
-        dreams.push('\n'+rel1);
+        console.log('\n'+rel1); dreams.push('\n'+rel1);
   			tira(rela,rel1);
   		}
   	}
-   	if (cou==0) dreams.push('\nValor no registrado');
+  	if (cou==0) console.log('\nValor no registrado');
+    dreams.push('\nValor no registrado');
 });
 }
-// http://expressjs.com/en/starter/static-files.html
-app.use(express.static('public'));
-
 // http://expressjs.com/en/starter/basic-routing.html
 app.get("/", function (request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
 
 app.get("/dreams", function (request, response) {
-  response.send(dreams); 
+  response.send(dreams);
 });
 
 // could also use the POST body instead of query string: http://expressjs.com/en/api.html#req.body
 app.post("/dreams", function (request, response) {
-  mete(request.query.dream);
+  rel0(request.query.dream);
   response.sendStatus(200);
 });
 
